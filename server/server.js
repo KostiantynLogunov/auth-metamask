@@ -32,37 +32,47 @@ const allowCrossDomain = function(req, res, next) {
 app.use(allowCrossDomain);
 
 
-router.post('/check-sign', (req, res) => {
-
-    let signature = req.body.signature;
-    let publicAddress = req.body.coinbase;
-    let msg = req.body.msg;
-    // console.log(signature);
-    // console.log(publicAddress);
-
-    const msgBuffer = ethUtil.toBuffer(msg);
-    const msgHash = ethUtil.hashPersonalMessage(msgBuffer);
-    const signatureBuffer = ethUtil.toBuffer(signature);
-    const signatureParams = ethUtil.fromRpcSig(signatureBuffer);
-    const publicKey = ethUtil.ecrecover(
-        msgHash,
-        signatureParams.v,
-        signatureParams.r,
-        signatureParams.s
-    );
-    const addressBuffer = ethUtil.publicToAddress(publicKey);
-    const address = ethUtil.bufferToHex(addressBuffer);
-
-    if (address.toLowerCase() === publicAddress.toLowerCase()) {
-        let token = jwt.sign({ id: 1}, config.secret, {expiresIn: 86400 });
-        res.json({token: token});
-    } else {
-        return res
-            .status(401)
-            .send({ error: 'Signature verification failed' });
-    }
-
+router.post('/api/check-server', (req, res) => {
+    let info = 'OK --- 777';
+    res.json({info: info});
 });
+
+    router.post('/api/signin', (req, res) => {
+
+        let signature = req.body.signature;
+        let publicAddress = req.body.coinbase;
+        let msg = req.body.msg;
+        // console.log(signature);
+        console.log('message with signature for check: --- ' +req.body.msg);
+
+        const msgBuffer = ethUtil.toBuffer(msg);
+        const msgHash = ethUtil.hashPersonalMessage(msgBuffer);
+        const signatureBuffer = ethUtil.toBuffer(signature);
+        const signatureParams = ethUtil.fromRpcSig(signatureBuffer);
+        const publicKey = ethUtil.ecrecover(
+            msgHash,
+            signatureParams.v,
+            signatureParams.r,
+            signatureParams.s
+        );
+        const addressBuffer = ethUtil.publicToAddress(publicKey);
+        const address = ethUtil.bufferToHex(addressBuffer);
+
+        if (address.toLowerCase() === publicAddress.toLowerCase()) {
+            let token = jwt.sign({ id: 1}, config.secret, {expiresIn: 86400 });
+            res.json({
+                user:{
+                    name: 'nonameTest'
+                },
+                token: token
+            });
+        } else {
+            return res
+                .status(401)
+                .send({ error: 'Signature verification failed' });
+        }
+    });
+
 
 app.use(router);
 

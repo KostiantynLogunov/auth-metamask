@@ -1,89 +1,48 @@
 <template>
-    <div class='metamask-info'>
-        <!--<p>Metamask: {{ web3.isInjected }}</p>
-        <p>Network: {{ web3.networkId }}</p>
-        <p>Account: {{ web3.coinbase }}</p>
-        <p>Balance: {{ web3.balance}}</p>-->
-
-        <div v-if="web3.isInjected">
-            <button class="btn btn-warning" v-on:click="Login">Login</button>
-        </div>
-        <div v-else>
-            <h1>Please go to metamask in your brouser and sign in !</h1>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card card-default">
+                    <div class="card-body text-center">
+                        <h2>DATA for test</h2>
+                        <p>Metamask: {{ web3.isInjected }}</p>
+                        <p>Network: {{ web3.networkId }}</p>
+                        <p>Account: {{ web3.coinbase }}</p>
+                        <p>Balance: {{ web3.balance }}</p>
+                        <img src="../ethereum.jpg" alt="ethereum" style="max-height: 120px"><br>
+                        <p style="color: lightgrey">на цій кнопці просто звернення до сервера для перевірки що запрос пішов із уже отриманим токеном після підпису. Check network in Inspect</p>
+                        <button class="btn btn-primary" @click="checkServer">REQUEST with token!</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import Web3 from 'web3'
+    import  axios  from 'axios'
 
     export default {
-        data () {
-            return {
-                msg: 'Hello World!'
-            }
-        },
-        beforeCreate () {
-            this.$store.dispatch('registerWeb3')
-        },
+        name: 'home',
         computed: {
+            currentUser() {
+                return this.$store.getters.currentUser
+            },
             web3 () {
                 return this.$store.state.web3
-            }
+            },
         },
         methods: {
-            Login()
-            {
-                let myMeta = {
-                    isInjected: this.web3.isInjected ,
-                    networkId: this.web3.networkId ,
-                    coinbase: this.web3.coinbase ,
-                    balance: this.web3.balance ,
-                };
-
-                console.log(myMeta);
-                var random_msg = "Hello from23111 Kostia!";
-                window.web3.personal.sign(window.web3.fromUtf8(random_msg), window.web3.eth.coinbase, (err, signature)=>{
-                    if (err) throw err;
-                    console.log('My pidpys:', signature);
-
-                    myMeta.signuture = signature;
-                    if (myMeta.isInjected) {
-                    this.$http.post('http://localhost:3000/check-sign',
-                        {
-                            signature: signature,
-                            coinbase: myMeta.coinbase,
-                            msg: random_msg
-                        })
-                        .then(response => {
-                            localStorage.setItem('jwt',response.data.token)
-                            console.log(response.data)
-                        })
-                        .catch(function (error) {
-                            console.error(error.response);
-                        });
-                }
-
-                });
-
+            checkServer(){
+                axios.post('http://localhost:3000/api/check-server')
+                    .then((response) => {
+                        alert("Check headers in network in inspect");
+                        console.log(response.data)
+                    })
+                    .catch((err) => {
+                        console.log('Something wrong with token...');
+                    })
             }
         }
     }
 </script>
-
-<style scoped>
-    h1, h2 {
-        font-weight: normal;
-    }
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    li {
-        display: inline-block;
-        margin: 0 10px;
-    }
-    a {
-        color: #42b983;
-    }
-</style>

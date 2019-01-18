@@ -1,4 +1,4 @@
-# my-client
+# vue-jwt-auth-my
 
 > A Vue.js project
 

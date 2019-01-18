@@ -1,23 +1,28 @@
 <template>
-  <div id="app">
-    <!--<img src="./assets/logo.png">-->
-    <router-view/>
-  </div>
+    <div id="app">
+        <Header />
+        <div class="content">
+            <router-view/>
+        </div>
+    </div>
 </template>
 
 <script>
-export default {
-  name: 'App'
-}
+    import Header from './components/Header'
+    export default {
+        name: 'App',
+        components:{Header}
+    }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+    @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+    #app1 {
+        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+        margin-top: 60px;
+    }
 </style>
