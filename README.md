@@ -1,11 +1,12 @@
 # auth-metamask
+
 # my-client - it's front app and server - it's server for backand app
 
 > A Vue.js project
 
 ## Build Setup
 
-``` bash
+```bash
 # clone progect in your folder
 git clone  install https://github.com/KostiantynLogunov/auth-metamask.git
 
@@ -19,3 +20,5 @@ node server/server/js
 npm run dev
 
 ```
+
+bla bla
